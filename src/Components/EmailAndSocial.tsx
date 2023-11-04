@@ -3,12 +3,14 @@ import { useSocialLoginConnectors } from '../socialLogins/socialLoginConnectors'
 import { useEffect, useState, useContext } from 'react';
 import NavContext from '../NavContext';
 import axios from "axios"
+import Iframe from './Iframe';
 
 export default function EmailAndSocial(props: any) {
-  const navigate = useNavigate();
+
   const { setView } = useContext(NavContext)
   const socialLogins = useSocialLoginConnectors();
   const [authenticated, setAuthenticated] = useState(false)
+  const [openIframe, setOpenFrame] = useState(false)
 
   const baseUrl = 'https://staging.tria.so'
 
@@ -19,6 +21,7 @@ export default function EmailAndSocial(props: any) {
     localStorage.setItem('socialNetwork', socialNetwork);
     try {
       //window.open(`${baseUrl}/api/v1/auth/oauth/${socialNetwork}`, '_blank');
+      setOpenFrame(true)
       window.open(`${baseUrl}/api/v1/auth/oauth/${socialNetwork}`, "SSO", `width=${500},height=${600},left=${0},top=${top}`);
     } catch (err) {
       console.log(err);
@@ -77,6 +80,7 @@ export default function EmailAndSocial(props: any) {
 
   return (
     <div>
+      {openIframe === true ? <Iframe /> : null}
       <button>
         <div className="w-[416px] h-[260px] px-5 py-4 rounded-2xl border border-violet-400 border-opacity-30 flex-col justify-center items-center gap-2 inline-flex">
           <div className="w-[376px] h-[54px] py-3 justify-center items-center gap-4 inline-flex">
